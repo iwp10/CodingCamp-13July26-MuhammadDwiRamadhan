@@ -26,12 +26,34 @@ function startClock() {
 
 
 // =============================================
+// DATE
+// =============================================
+
+// Reads the current date and updates the #date element
+// Format: Thursday, July 16, 2026
+function updateDate() {
+  const now = new Date();
+
+  const formatted = now.toLocaleDateString('en-US', {
+    weekday: 'long',
+    year:    'numeric',
+    month:   'long',
+    day:     'numeric',
+  });
+
+  const dateEl = document.querySelector('#date');
+  dateEl.textContent = formatted;
+}
+
+
+// =============================================
 // INIT — runs when the page is fully loaded
 // =============================================
 
 // Entry point: initialises all features in order
 function init() {
   startClock();
+  updateDate();
 }
 
 document.addEventListener('DOMContentLoaded', init);
