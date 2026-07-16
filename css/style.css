@@ -1,4 +1,780 @@
 /* =============================================
    style.css — To-Do List Life Dashboard
-   Milestone 1: Placeholder (styles added in later milestones)
+   Milestone 2: Responsive CSS Layout
    ============================================= */
+
+
+/* =============================================
+   1. CSS VARIABLES — DESIGN SYSTEM
+   ============================================= */
+
+:root {
+  /* --- Color Palette: Light Theme (default) --- */
+  --color-bg:           #f0f2f5;
+  --color-surface:      #ffffff;
+  --color-surface-alt:  #f8f9fb;
+  --color-border:       #e2e6ea;
+
+  --color-text-primary:   #1a1d23;
+  --color-text-secondary: #5a6270;
+  --color-text-muted:     #9aa0aa;
+
+  --color-accent:         #4f7ef8;
+  --color-accent-hover:   #3a68e0;
+  --color-accent-active:  #2d55c9;
+
+  --color-success:        #28a745;
+  --color-success-hover:  #218838;
+
+  --color-warning:        #f0a500;
+  --color-warning-hover:  #d49200;
+
+  --color-danger:         #e03e3e;
+  --color-danger-hover:   #c42f2f;
+
+  --color-done-text:      #9aa0aa;
+
+  /* --- Error / Alert --- */
+  --color-error-text:     #c0392b;
+  --color-error-bg:       #fdf0ef;
+
+  /* --- Shadow --- */
+  --shadow-card:    0 2px 8px rgba(0, 0, 0, 0.07);
+  --shadow-card-hover: 0 4px 16px rgba(0, 0, 0, 0.11);
+  --shadow-btn:     0 1px 3px rgba(0, 0, 0, 0.12);
+
+  /* --- Border Radius --- */
+  --radius-sm:   4px;
+  --radius-md:   8px;
+  --radius-lg:   14px;
+  --radius-pill: 999px;
+
+  /* --- Spacing Scale --- */
+  --space-xs:  4px;
+  --space-sm:  8px;
+  --space-md:  16px;
+  --space-lg:  24px;
+  --space-xl:  32px;
+  --space-2xl: 48px;
+
+  /* --- Typography --- */
+  --font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+
+  --font-size-xs:   0.75rem;   /* 12px */
+  --font-size-sm:   0.875rem;  /* 14px */
+  --font-size-base: 1rem;      /* 16px */
+  --font-size-md:   1.125rem;  /* 18px */
+  --font-size-lg:   1.375rem;  /* 22px */
+  --font-size-xl:   1.75rem;   /* 28px */
+  --font-size-2xl:  2.5rem;    /* 40px */
+  --font-size-3xl:  3.5rem;    /* 56px */
+
+  --font-weight-normal:  400;
+  --font-weight-medium:  500;
+  --font-weight-semibold: 600;
+  --font-weight-bold:    700;
+
+  --line-height-tight:  1.2;
+  --line-height-base:   1.6;
+
+  /* --- Transitions --- */
+  --transition-fast:   150ms ease;
+  --transition-base:   250ms ease;
+  --transition-slow:   400ms ease;
+
+  /* --- Layout --- */
+  --header-height: 60px;
+  --dashboard-max-width: 1100px;
+  --dashboard-gap: var(--space-lg);
+}
+
+
+/* =============================================
+   2. DARK THEME VARIABLE OVERRIDES
+   (Applied via body.dark — ready for Milestone 9)
+   ============================================= */
+
+body.dark {
+  --color-bg:           #13151a;
+  --color-surface:      #1e2130;
+  --color-surface-alt:  #252a3a;
+  --color-border:       #2e3347;
+
+  --color-text-primary:   #eef0f5;
+  --color-text-secondary: #a0a8b8;
+  --color-text-muted:     #5c6478;
+
+  --color-accent:         #5b8aff;
+  --color-accent-hover:   #4a78f0;
+  --color-accent-active:  #3a68e0;
+
+  --color-done-text:      #4a5060;
+
+  --color-error-text:     #f07070;
+  --color-error-bg:       #2a1a1a;
+
+  --shadow-card:       0 2px 8px rgba(0, 0, 0, 0.35);
+  --shadow-card-hover: 0 4px 20px rgba(0, 0, 0, 0.50);
+  --shadow-btn:        0 1px 3px rgba(0, 0, 0, 0.40);
+}
+
+
+/* =============================================
+   3. CSS RESET & BASE
+   ============================================= */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-base);
+  color: var(--color-text-primary);
+  background-color: var(--color-bg);
+  transition:
+    background-color var(--transition-slow),
+    color var(--transition-slow);
+  min-height: 100vh;
+}
+
+ul {
+  list-style: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+  font-family: var(--font-family);
+}
+
+input {
+  font-family: var(--font-family);
+}
+
+/* Focus visible outline — keyboard accessibility */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Remove outline for mouse users */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+
+/* =============================================
+   4. TYPOGRAPHY HELPERS
+   ============================================= */
+
+.section-title {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-md);
+  letter-spacing: 0.01em;
+}
+
+
+/* =============================================
+   5. HEADER
+   ============================================= */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: var(--header-height);
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  transition:
+    background-color var(--transition-slow),
+    border-color var(--transition-slow);
+}
+
+.header-inner {
+  max-width: var(--dashboard-max-width);
+  margin: 0 auto;
+  padding: 0 var(--space-lg);
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.app-title {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-accent);
+  letter-spacing: 0.02em;
+}
+
+
+/* =============================================
+   6. DASHBOARD GRID LAYOUT
+   ============================================= */
+
+.dashboard {
+  max-width: var(--dashboard-max-width);
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-lg);
+  display: grid;
+  gap: var(--dashboard-gap);
+
+  /* Mobile: single column */
+  grid-template-columns: 1fr;
+
+  grid-template-areas:
+    "greeting"
+    "datetime"
+    "timer"
+    "todo"
+    "links";
+}
+
+/* Assign grid areas to sections */
+#greeting  { grid-area: greeting; }
+#datetime  { grid-area: datetime; }
+#timer     { grid-area: timer; }
+#todo      { grid-area: todo; }
+#links     { grid-area: links; }
+
+
+/* =============================================
+   7. CARD COMPONENT
+   ============================================= */
+
+.card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-card);
+  transition:
+    background-color var(--transition-slow),
+    border-color var(--transition-slow),
+    box-shadow var(--transition-base);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-card-hover);
+}
+
+
+/* =============================================
+   8. GREETING SECTION
+   ============================================= */
+
+.greeting-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.greeting-text {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-tight);
+}
+
+.name-edit {
+  display: flex;
+  gap: var(--space-sm);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+
+/* =============================================
+   9. DATE AND TIME SECTION
+   ============================================= */
+
+.datetime-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  text-align: center;
+}
+
+.clock {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  color: var(--color-text-primary);
+  line-height: 1;
+}
+
+.date {
+  font-size: var(--font-size-md);
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-medium);
+}
+
+
+/* =============================================
+   10. FOCUS TIMER SECTION
+   ============================================= */
+
+.timer-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);
+  text-align: center;
+}
+
+.timer-display {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.06em;
+  color: var(--color-text-primary);
+  line-height: 1;
+}
+
+.timer-controls {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+
+/* =============================================
+   11. TO-DO LIST SECTION
+   ============================================= */
+
+.todo-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.task-input-row {
+  display: flex;
+  gap: var(--space-sm);
+  align-items: center;
+}
+
+.task-error {
+  font-size: var(--font-size-sm);
+  color: var(--color-error-text);
+  background-color: var(--color-error-bg);
+  border-radius: var(--radius-sm);
+  padding: var(--space-xs) var(--space-sm);
+  display: none; /* shown by JS when needed */
+  transition: background-color var(--transition-slow);
+}
+
+/* Task list */
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+/* Individual task item */
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background-color: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  transition:
+    background-color var(--transition-slow),
+    border-color var(--transition-slow);
+}
+
+.task-item:hover {
+  border-color: var(--color-accent);
+}
+
+/* Task checkbox */
+.task-checkbox {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  accent-color: var(--color-accent);
+  cursor: pointer;
+}
+
+/* Task label text */
+.task-label {
+  flex: 1;
+  font-size: var(--font-size-base);
+  color: var(--color-text-primary);
+  word-break: break-word;
+  transition: color var(--transition-fast);
+}
+
+/* Completed task */
+.task-item.done .task-label {
+  text-decoration: line-through;
+  color: var(--color-done-text);
+}
+
+/* Task action buttons wrapper */
+.task-actions {
+  display: flex;
+  gap: var(--space-xs);
+  flex-shrink: 0;
+}
+
+/* Empty state */
+.empty-state {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  text-align: center;
+  padding: var(--space-md) 0;
+}
+
+
+/* =============================================
+   12. QUICK LINKS SECTION
+   ============================================= */
+
+.links-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.link-input-row {
+  display: flex;
+  gap: var(--space-sm);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.links-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+/* Individual link chip */
+.link-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-md);
+  background-color: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-accent);
+  transition:
+    background-color var(--transition-fast),
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+  cursor: pointer;
+}
+
+.link-chip:hover {
+  background-color: var(--color-accent);
+  color: #ffffff;
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-btn);
+}
+
+.link-chip-delete {
+  background: none;
+  border: none;
+  color: inherit;
+  font-size: var(--font-size-sm);
+  line-height: 1;
+  padding: 0;
+  opacity: 0.6;
+  transition: opacity var(--transition-fast);
+}
+
+.link-chip-delete:hover {
+  opacity: 1;
+}
+
+
+/* =============================================
+   13. BUTTONS
+   ============================================= */
+
+/* Base button */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  border: none;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-btn);
+  transition:
+    background-color var(--transition-fast),
+    color var(--transition-fast),
+    box-shadow var(--transition-fast),
+    opacity var(--transition-fast);
+  white-space: nowrap;
+  user-select: none;
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Primary (accent blue) */
+.btn-primary {
+  background-color: var(--color-accent);
+  color: #ffffff;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: var(--color-accent-hover);
+}
+
+.btn-primary:active:not(:disabled) {
+  background-color: var(--color-accent-active);
+}
+
+/* Start (green) */
+.btn-start {
+  background-color: var(--color-success);
+  color: #ffffff;
+}
+
+.btn-start:hover:not(:disabled) {
+  background-color: var(--color-success-hover);
+}
+
+/* Stop / Pause (amber) */
+.btn-stop {
+  background-color: var(--color-warning);
+  color: #ffffff;
+}
+
+.btn-stop:hover:not(:disabled) {
+  background-color: var(--color-warning-hover);
+}
+
+/* Reset (red) */
+.btn-reset {
+  background-color: var(--color-danger);
+  color: #ffffff;
+}
+
+.btn-reset:hover:not(:disabled) {
+  background-color: var(--color-danger-hover);
+}
+
+/* Small ghost button — used for task Edit / Delete actions */
+.btn-ghost {
+  background: none;
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  padding: var(--space-xs) var(--space-sm);
+  font-size: var(--font-size-xs);
+  border-radius: var(--radius-sm);
+  box-shadow: none;
+  transition:
+    background-color var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.btn-ghost:hover:not(:disabled) {
+  background-color: var(--color-surface-alt);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+/* Icon button — used for the theme toggle */
+.btn-icon {
+  background: none;
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-md);
+  line-height: 1;
+  transition:
+    background-color var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.btn-icon:hover {
+  background-color: var(--color-surface-alt);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+
+/* =============================================
+   14. INPUTS
+   ============================================= */
+
+.task-input,
+.name-input,
+.link-input {
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  background-color: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  transition:
+    border-color var(--transition-fast),
+    background-color var(--transition-slow),
+    box-shadow var(--transition-fast);
+  outline: none;
+}
+
+/* Task input grows to fill available space */
+.task-input {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Name input has a fixed comfortable width */
+.name-input {
+  flex: 1;
+  min-width: 140px;
+  max-width: 260px;
+}
+
+/* Link inputs share space in their row */
+.link-input {
+  flex: 1;
+  min-width: 100px;
+}
+
+/* Hover state */
+.task-input:hover,
+.name-input:hover,
+.link-input:hover {
+  border-color: var(--color-text-muted);
+}
+
+/* Focus state */
+.task-input:focus,
+.name-input:focus,
+.link-input:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(79, 126, 248, 0.18);
+  background-color: var(--color-surface);
+}
+
+/* Placeholder text */
+.task-input::placeholder,
+.name-input::placeholder,
+.link-input::placeholder {
+  color: var(--color-text-muted);
+}
+
+
+/* =============================================
+   15. FOOTER
+   ============================================= */
+
+.site-footer {
+  text-align: center;
+  padding: var(--space-lg) var(--space-md);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  border-top: 1px solid var(--color-border);
+  transition:
+    border-color var(--transition-slow),
+    color var(--transition-slow);
+}
+
+
+/* =============================================
+   16. RESPONSIVE BREAKPOINTS
+   ============================================= */
+
+/* --- Tablet: 640px and up --- */
+@media (min-width: 640px) {
+  .dashboard {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "greeting  datetime"
+      "timer     timer"
+      "todo      todo"
+      "links     links";
+  }
+
+  .greeting-text {
+    font-size: var(--font-size-2xl);
+  }
+}
+
+/* --- Desktop: 900px and up --- */
+@media (min-width: 900px) {
+  .dashboard {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "greeting  datetime"
+      "timer     todo"
+      "links     todo";
+  }
+
+  .clock,
+  .timer-display {
+    font-size: var(--font-size-3xl);
+  }
+}
+
+/* --- Wide desktop: 1100px and up --- */
+@media (min-width: 1100px) {
+  .dashboard {
+    padding: var(--space-2xl) var(--space-xl);
+  }
+}
+
+/* --- Small mobile: 380px and below --- */
+@media (max-width: 380px) {
+  .clock,
+  .timer-display {
+    font-size: var(--font-size-2xl);
+  }
+
+  .timer-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .link-input-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .name-input {
+    max-width: 100%;
+  }
+}
