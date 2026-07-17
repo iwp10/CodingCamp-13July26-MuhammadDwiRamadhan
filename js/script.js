@@ -29,20 +29,24 @@ function startClock() {
 // GREETING
 // =============================================
 
-// Determines the greeting based on the current hour and updates #greeting-text
+// Determines the greeting based on the current hour and updates #greeting-text.
+// If a name is provided it is included: "Good Morning, Alex!"
 // 05:00–11:59 → Good Morning | 12:00–17:59 → Good Afternoon | 18:00–04:59 → Good Evening
-function updateGreeting() {
+function updateGreeting(name) {
   const hour = new Date().getHours();
 
-  let greeting;
+  let timePhrase;
 
   if (hour >= 5 && hour < 12) {
-    greeting = 'Good Morning!';
+    timePhrase = 'Good Morning';
   } else if (hour >= 12 && hour < 18) {
-    greeting = 'Good Afternoon!';
+    timePhrase = 'Good Afternoon';
   } else {
-    greeting = 'Good Evening!';
+    timePhrase = 'Good Evening';
   }
+
+  // Append the name if one is provided, otherwise just add the exclamation mark
+  const greeting = name ? `${timePhrase}, ${name}!` : `${timePhrase}!`;
 
   const greetingEl = document.querySelector('#greeting-text');
   greetingEl.textContent = greeting;
@@ -474,6 +478,51 @@ function initLinks() {
 
 
 // =============================================
+// CUSTOM NAME GREETING
+// =============================================
+
+// Saves the user's name to Local Storage
+function saveUserName(name) {
+  localStorage.setItem('userName', name);
+}
+
+// Loads the saved name from Local Storage.
+// Returns an empty string if no name has been saved.
+function loadUserName() {
+  return localStorage.getItem('userName') || '';
+}
+
+// Wires up the Save button and Enter key for the name input.
+// Loads and applies any saved name immediately on page load.
+function initName() {
+  const nameInput = document.querySelector('#name-input');
+  const saveBtn   = document.querySelector('#save-name');
+
+  // Saves the name entered in the input and refreshes the greeting
+  function handleSaveName() {
+    const name = nameInput.value.trim();
+
+    // Ignore empty or whitespace-only input
+    if (name === '') return;
+
+    saveUserName(name);
+    updateGreeting(name);
+    nameInput.value = '';
+  }
+
+  saveBtn.addEventListener('click', handleSaveName);
+
+  nameInput.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') handleSaveName();
+  });
+
+  // Restore saved name and update the greeting on page load
+  const savedName = loadUserName();
+  updateGreeting(savedName);
+}
+
+
+// =============================================
 // THEME (LIGHT / DARK MODE)
 // =============================================
 
@@ -523,7 +572,7 @@ function init() {
   initTheme();
   startClock();
   updateDate();
-  updateGreeting();
+  initName();
   initTimer();
   initTodo();
   initLinks();
