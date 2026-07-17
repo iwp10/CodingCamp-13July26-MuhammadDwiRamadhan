@@ -348,6 +348,24 @@ function initTodo() {
 // In-memory links array — each link: { id, name, url }
 let links = [];
 
+// Saves the current links array to Local Storage as a JSON string
+function saveLinks() {
+  localStorage.setItem('quickLinks', JSON.stringify(links));
+}
+
+// Loads links from Local Storage and returns a valid array.
+// Returns an empty array if no data exists or if the data is corrupted.
+function loadLinks() {
+  try {
+    const stored = localStorage.getItem('quickLinks');
+    const parsed = JSON.parse(stored);
+    // Confirm the parsed value is actually an array before using it
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (e) {
+    return [];
+  }
+}
+
 // Ensures a URL starts with http:// or https://, prepending https:// if not
 function normaliseUrl(url) {
   if (url.startsWith('http://') || url.startsWith('https://')) {
@@ -421,12 +439,14 @@ function addLink() {
   nameInput.value = '';
   urlInput.value  = '';
 
+  saveLinks();
   renderLinks();
 }
 
 // Removes a link from the array by its id and re-renders
 function deleteLink(id) {
   links = links.filter(function (l) { return l.id !== id; });
+  saveLinks();
   renderLinks();
 }
 
@@ -447,7 +467,8 @@ function initLinks() {
     if (e.key === 'Enter') addLink();
   });
 
-  // Render the initial empty state
+  // Load saved links from Local Storage before first render
+  links = loadLinks();
   renderLinks();
 }
 
